@@ -1,5 +1,5 @@
 ﻿using System;
-using Haasonline.Public.ExchangeDriver.Bittrex;
+using Haasonline.Public.ExchangeDriver.Coinall;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TradeServer.ScriptingDriver.ScriptApi.DataObjects;
 using TradeServer.ScriptingDriver.ScriptApi.Interfaces;
@@ -7,7 +7,7 @@ using TradeServer.ScriptingDriver.ScriptApi.Interfaces;
 namespace Haasonline.Public.ExchangeDriver.Tests
 {
     [TestClass]
-    public sealed class BittrexApiTest : TestBase
+    public sealed class CoinallTest : TestBase
     {
         protected override IScriptApi Api { get; set; }
 
@@ -21,13 +21,13 @@ namespace Haasonline.Public.ExchangeDriver.Tests
         protected override bool AllowZeroAmountDecimals { get; set; } = true;
         protected override bool AllowZeroFee { get; set; } = false;
 
-        public BittrexApiTest() : base()
+        public CoinallTest() : base()
         {
             PublicKey = "";
             PrivateKey = "";
             ExtraKey = "";
 
-            Api = new BittrexApi();
+            Api = new Coinall();
 
             Api.SetCredentials(PublicKey, PrivateKey, ExtraKey);
 

@@ -7,8 +7,8 @@
     <ProjectGuid>{3C2DB2FF-0CD4-4AE1-A71D-DA5321BFA7BE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Haasonline.Public.ExchangeDriver.Bittrex</RootNamespace>
-    <AssemblyName>Haasonline.Public.ExchangeDriver.Bittrex</AssemblyName>
+    <RootNamespace>Haasonline.Public.ExchangeDriver.Coinall</RootNamespace>
+    <AssemblyName>Haasonline.Public.ExchangeDriver.Coinall</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,7 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\Haasonline.Public.ExchangeDriver.Bittrex\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\Haasonline.Public.ExchangeDriver.Coinall\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
@@ -46,11 +46,11 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="TradeServer.ScriptingDriver">
-      <HintPath>..\..\Haasonline.Public.ExchangeDriver.Bittrex\lib\TradeServer.ScriptingDriver.dll</HintPath>
+      <HintPath>..\..\Haasonline.Public.ExchangeDriver.Coinall\lib\TradeServer.ScriptingDriver.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BittrexApi.cs" />
+    <Compile Include="Coinall.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

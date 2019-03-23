@@ -11,16 +11,16 @@ using RestSharp;
 using TradeServer.ScriptingDriver.ScriptApi.Enums;
 using TradeServer.ScriptingDriver.ScriptApi.Interfaces;
 
-namespace Haasonline.Public.ExchangeDriver.Bittrex
+namespace Haasonline.Public.ExchangeDriver.Coinall
 {
-    public class BittrexApi : IScriptApi
+    public class Coinall : IScriptApi
     {
         private string _publicKey;
         private string _privateKey;
         private string _extra;
 
         private long _lastNonce;
-        private readonly string _apiUrl = "https://bittrex.com/api/v1.1";
+        private readonly string _apiUrl = "https://www.CoinAll.com/api/";
         private readonly HMACSHA512 _hmac = new HMACSHA512();
 
         public string PingAddress { get; set; }
@@ -49,9 +49,9 @@ namespace Haasonline.Public.ExchangeDriver.Bittrex
 
         private readonly object _lockObject = new object();
 
-        public BittrexApi()
+        public Coinall()
         {
-            PingAddress = "http://www.bittrex.com:80";
+            PingAddress = "CoinAll.com";
             PollingSpeed = 30;
             PlatformType = ScriptedExchangeType.Spot;
 
@@ -89,7 +89,7 @@ namespace Haasonline.Public.ExchangeDriver.Bittrex
 
             try
             {
-                var response = Query(false, "/public/getmarkets");
+                var response = Query(false, "/spot/v3/instruments/ticker");
 
                 if (response != null && response.Value<bool>("success"))
                 {
@@ -886,7 +886,7 @@ namespace Haasonline.Public.ExchangeDriver.Bittrex
                 IsBuyOrder = o.Value<string>("OrderType").ToLower().IndexOf("buy", StringComparison.Ordinal) > -1,
             };
 
-            // Bittrex send total pays price. Small correction to be made here.
+            // Coinall send total pays price. Small correction to be made here.
             r.Price = Math.Round(r.Price / r.Amount, 8);
 
             return r;
