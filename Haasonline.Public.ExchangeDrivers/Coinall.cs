@@ -118,7 +118,7 @@ namespace Haasonline.Public.ExchangeDriver.Coinall
 
             try
             {
-                var response = Query(false, "/public/getticker?", new Dictionary<string, string>()
+                var response = Query(false, "/spot/v3/instruments/", new Dictionary<string, string>()
                 {
                     {"market",market.SecondaryCurrency.ToUpper() + "-" + market.PrimaryCurrency.ToUpper()},
                 });
@@ -140,7 +140,7 @@ namespace Haasonline.Public.ExchangeDriver.Coinall
 
             try
             {
-                var response = Query(false, "/public/getmarketsummaries");
+                var response = Query(false, "/spot/v3/instruments/ticker");
 
                 if (response != null && response.Value<bool>("success"))
                 {
@@ -164,9 +164,8 @@ namespace Haasonline.Public.ExchangeDriver.Coinall
 
             try
             {
-                var response = Query(false, "/public/getorderbook?", new Dictionary<string, string>()
+                var response = Query(false, "/spot/v3/instruments/" +market.SecondaryCurrency.ToUpper() + "-" + market.PrimaryCurrency.ToUpper()+"/book?", new Dictionary<string, string>()
                     {
-                        {"market",market.SecondaryCurrency.ToUpper() + "-" + market.PrimaryCurrency.ToUpper()},
                         {"type","both"},
                         {"depth","50"}
                     });
@@ -193,10 +192,9 @@ namespace Haasonline.Public.ExchangeDriver.Coinall
 
             try
             {
-                var response = Query(false, "/public/getmarkethistory?", new Dictionary<string, string>()
+                var response = Query(false, "/spot/v3/instruments/" + market.SecondaryCurrency.ToUpper() + "-" + market.PrimaryCurrency.ToUpper() +"/trades", new Dictionary<string, string>()
                     {
-                        {"market",market.SecondaryCurrency.ToUpper() + "-" + market.PrimaryCurrency.ToUpper()},
-                        {"count","100"}
+                        {"limit","100"}
                     });
 
                 if (response != null && response.Value<bool>("success"))
@@ -225,15 +223,24 @@ namespace Haasonline.Public.ExchangeDriver.Coinall
         #endregion
 
         #region Private API
+        //requires OK-ACCESS-KEY The api key as a string.
+
+        // OK-ACCESS-SIGN The base64-encoded signature (see Signing a Message).
+
+        // OK-ACCESS-TIMESTAMP A timestamp for your request.
+
+        // OK-ACCESS-PASSPHRASE The passphrase you specified when creating the API key.
+
+        // All request bodies should have content type application/json and be valid JSON.
         public Dictionary<string, decimal> GetWallet()
         {
             Dictionary<string, decimal> wallet = null;
 
             try
             {
-                var response = Query(true, "/account/getbalances?", new Dictionary<string, string>()
+                var response = Query(true, "/account/v3/wallet", new Dictionary<string, string>()
                 {
-                    { "apikey", _publicKey }
+                    //{ "apikey", _publicKey }
                 });
 
                 if (response != null && response.Value<bool>("success"))
@@ -260,7 +267,9 @@ namespace Haasonline.Public.ExchangeDriver.Coinall
 
             try
             {
-                var response = Query(true, "/market/getopenorders?", new Dictionary<string, string>() { { "apikey", _publicKey } });
+                var response = Query(true, "/spot/v3/orders_pending", new Dictionary<string, string>() { 
+                    //{ "apikey", _publicKey } 
+                    });
 
                 if (response != null && response.Value<bool>("success"))
                 {
@@ -291,11 +300,11 @@ namespace Haasonline.Public.ExchangeDriver.Coinall
             try
             {
                 var parameters = new Dictionary<string, string>() {
-                    { "apikey", _publicKey },
-                    { "count", "1000" }
+                    //{ "apikey", _publicKey },
+                    { "limit", "1000" }
                 };
-
-                var response = Query(true, "/account/getorderhistory?", parameters);
+                //need orderid here from GetOpenOrders()
+                var response = Query(true, "/spot/v3/orders/" + orderid, parameters);
 
                 if (response != null && response.Value<bool>("success"))
                 {
