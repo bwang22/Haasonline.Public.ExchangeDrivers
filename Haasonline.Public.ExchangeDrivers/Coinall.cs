@@ -328,19 +328,24 @@ namespace Haasonline.Public.ExchangeDriver.Coinall
 
             try
             {
+                var apiCall = "buy";
+                if (direction == ScriptedOrderType.Sell)
+                    apiCall = "sell";
+
                 var parameters = new Dictionary<string, string>
                     {
-                        {"apikey", _publicKey},
-                        {"market", market.SecondaryCurrency.ToUpper() + "-" + market.PrimaryCurrency.ToUpper()},
-                        {"quantity", amount.ToString(CultureInfo.InvariantCulture)},
-                        {"rate", price.ToString(CultureInfo.InvariantCulture)}
+                        //{"apikey", _publicKey},
+                        {"instrument_id", market.SecondaryCurrency.ToUpper() + "-" + market.PrimaryCurrency.ToUpper()},
+                        {"side", apiCall}
+                        {"size", amount.ToString(CultureInfo.InvariantCulture)},
+                        {"price", price.ToString(CultureInfo.InvariantCulture)},
+                        
+                        {"type", isMarketOrder ? "market" : "limit"},
+                        
+                        {"margin_trading", 0}
                     };
 
-                var apiCall = "buylimit";
-                if (direction == ScriptedOrderType.Sell)
-                    apiCall = "selllimit";
-
-                var response = Query(true, "/market/" + apiCall + "?", parameters);
+                var response = Query(true, "/spot/v3/orders?", parameters);
 
                 if (response != null && response.Value<bool>("success"))
                     result = response.Value<JObject>("result").Value<string>("uuid");
@@ -363,10 +368,10 @@ namespace Haasonline.Public.ExchangeDriver.Coinall
 
             try
             {
-                var response = Query(true, "/market/cancel?", new Dictionary<string, string>()
+                var response = Query(true, "/spot/v3/cancel_orders/"+ orderId + "?", new Dictionary<string, string>()
                     {
-                        { "apikey", _publicKey },
-                        { "uuid", orderId }
+                      //  { "apikey", _publicKey },
+                        { "instrument_id", market.SecondaryCurrency.ToUpper() + "-" + market.PrimaryCurrency.ToUpper() }
                     });
 
                 result = response != null && response.Value<bool>("success");
@@ -385,7 +390,7 @@ namespace Haasonline.Public.ExchangeDriver.Coinall
 
             try
             {
-                var response = Query(true, "/account/getorder?", new Dictionary<string, string>() { { "apikey", _publicKey }, { "uuid", orderId } });
+                var response = Query(true, "/spot/v3/orders/"+orderId, new Dictionary<string, string>() { { "apikey", _publicKey }, { "instrument_id", scriptMarket.SecondaryCurrency.ToUpper() + "-" + scriptMarket.PrimaryCurrency.ToUpper() } });
 
                 if (response != null && response.Value<bool>("success"))
                     status = Order.ParseSingle(response.Value<JObject>("result")).Status;
