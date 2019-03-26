@@ -89,15 +89,12 @@ namespace Haasonline.Public.ExchangeDriver.Coinall
 
             try
             {
-                var response = Query(false, "/spot/v3/instruments/ticker");
+                var response = Query(false, "/spot/v3/instruments");
 
-                if (response != null && response.Value<bool>("success"))
-                {
-                    markets = new List<IScriptMarket>();
+                markets = new List<IScriptMarket>();
 
-                    foreach (var item in response.Value<JArray>("result"))
-                        markets.Add(new Market(item as JObject));
-                }
+                foreach (var item in response.Value<JArray>())
+                    markets.Add(new Market(item as JObject));
             }
             catch (Exception e)
             {
